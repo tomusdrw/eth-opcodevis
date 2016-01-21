@@ -20148,7 +20148,7 @@
 			var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Vis)).call.apply(_Object$getPrototypeO, [this].concat(args)));
 	
 			_this.state = {
-				code: ''
+				code: '0x6001600054016000556000600060006000600073bbbf5374fce5edbc8e2a8697c15331677e6ebf0b610401600054046001036127105a0302f16001556103e860005402600101600255'
 			};
 			return _this;
 		}
