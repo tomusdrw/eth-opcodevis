@@ -20129,6 +20129,10 @@
 		return '0x' + x;
 	}
 	
+	function padName(n) {
+		return _.padEnd(n, 7, ' ');
+	}
+	
 	var Vis = exports.Vis = function (_React$Component) {
 		_inherits(Vis, _React$Component);
 	
@@ -20222,7 +20226,7 @@
 								_react2.default.createElement(
 									'span',
 									{ className: _this2.label(i.opcode) },
-									i.name,
+									padName(i.name),
 									' (',
 									asHex(i.opcode),
 									')'
@@ -20242,7 +20246,10 @@
 		}, {
 			key: 'label',
 			value: function label(i) {
-				var labels = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
+				var labels = ['primary', 'success', 'info', 'warning', 'danger'];
+				if (inst.isPush(i)) {
+					return 'label label-default';
+				}
 				var l = labels[i % labels.length];
 				return 'label label-' + l;
 			}
