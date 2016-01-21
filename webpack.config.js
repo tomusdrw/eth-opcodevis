@@ -3,15 +3,17 @@ var path = require('path');
 var util = require('util');
 var pkg = require('./package.json');
 
+var DEBUG = process.env.NODE_ENV !== 'production';
+
 var filename = util.format('[name].%s.js', pkg.version);
 
 module.exports = {
 	entry: {
-		index: [
+		index: DEBUG ? [
 			'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
 			'webpack/hot/only-dev-server',
 			'./index.jsx'
-		]
+		] : './index.jsx'
 	},
 	devtool: process.env.WEBPACK_DEVTOOL || 'source-map',
 	output: {
@@ -26,7 +28,7 @@ module.exports = {
 			{
 				test: /\.jsx?$/,
 				exclude: /(node_modules|bower_components)/,
-				loaders: ['react-hot', 'babel'],
+				loaders: DEBUG ? ['react-hot', 'babel'] : ['babel'],
 			},
 			{
 				test: /\.html$/,
@@ -70,7 +72,7 @@ module.exports = {
 	devServer: {
 		contentBase: "./target",
 		noInfo: true, //  --no-info option
-		hot: true,
+		hot: DEBUG,
 		inline: true
 	},
 	plugins: [
