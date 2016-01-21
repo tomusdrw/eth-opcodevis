@@ -11,6 +11,10 @@ function asHex(i) {
 	return `0x${x}`;
 }
 
+function padName(n) {
+	return _.padEnd(n, 7, '\u00a0');
+}
+
 export class Vis extends React.Component {
 
 	constructor (...args) {
@@ -57,7 +61,7 @@ export class Vis extends React.Component {
 					<td>
 						<span>{asHex(i.pc)} </span>
 						<span className={this.label(i.opcode)}>
-							{i.name} ({asHex(i.opcode)})
+							{padName(i.name)} ({asHex(i.opcode)})
 						</span>
 					</td>
 					<td>{i.param}</td>
@@ -69,7 +73,10 @@ export class Vis extends React.Component {
 	}
 	
 	label (i) {
-		const labels = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
+		const labels = ['primary', 'success', 'info', 'warning', 'danger'];
+		if (inst.isPush(i)) {
+			return `label label-default`;
+		}
 		const l = labels[i % labels.length];
 		return `label label-${l}`;
 	}
