@@ -8,7 +8,14 @@ import {Vis} from './app/Vis';
 export class App extends React.Component {
 	render() {
 		return (
-			<Vis />
+			<div className={'container'}>
+				<br/>
+				<div className={'row'}>
+					<div className={'col-md-8 col-md-offset-2'}>
+						<Vis />
+					</div>
+				</div>
+			</div>
 		);
 	}
 }
