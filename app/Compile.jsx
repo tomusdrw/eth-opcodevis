@@ -98,6 +98,7 @@ export class Compile extends React.Component {
 				{this.renderError()}
 				<div className={'form-group'}>
 					<input
+						className={'form-control'}
 						readOnly={true}
 						type={'text'}
 						value={this.state.result}
