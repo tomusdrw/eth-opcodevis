@@ -20183,7 +20183,6 @@
 					}
 					var dest = labels[params] || '0x00';
 					var push = this.generateByteCode('PUSH', dest, 0, {});
-					var swap = this.generateByteCode('SWAP1', '', 0, {});
 					var _i = asHex(inst.getCode(op));
 	
 					return push + swap + _i;
