@@ -29,10 +29,10 @@ export class Compile extends React.Component {
 		if (!i) {
 			throw new Error(`Unknown instruction ${op}. Maybe it does not need params?`)
 		}
-		if (isNaN(p) && params) {
+		if (isNaN(parseInt(p, 16)) && params) {
 			throw new Error(`Unable to parse params: ${params}`);
 		}
-		if (isNaN(p)) {
+		if (isNaN(parseInt(p, 16))) {
 			return i;
 		}
 		return i + ((l !== ll) ? `0${p}` : p);
