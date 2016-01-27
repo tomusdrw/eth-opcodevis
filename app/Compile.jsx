@@ -8,7 +8,7 @@ export class Compile extends React.Component {
 	constructor (...args) {
 		super(...args);
 		this.state = {
-			code: '',
+			code: window.localStorage['lastCode'] || '',
 			result: '',
 			error: false
 		};
@@ -21,6 +21,9 @@ export class Compile extends React.Component {
 
 		if (op === 'PUSH') {
 			op = op + ll;
+		}
+		if (op === 'JUMP' || op === 'JUMPI' || op === 'JUMPDEST') {
+			// TODO handle labels	
 		}
 		let i = inst.getCode(op);
 		if (!i) {
@@ -37,6 +40,7 @@ export class Compile extends React.Component {
 
 	onCodeChange (ev) {
 		const code = ev.target.value;
+		window.localStorage['lastCode'] = code;
 		try {
 			const result = this.result(code);
 			this.setState({
@@ -56,6 +60,9 @@ export class Compile extends React.Component {
 	result (code) {
 		return '0x' + code
 			.split('\n')
+			// Remove comments
+			.map((line) => line.replace(/#.+/, ''))
+			// Remove whitespace
 			.map((line) => line.replace(/^\s+/, '').replace(/\s+$/, '').replace(/\s+/, ' '))
 			.filter((line) => line)
 			.map((line) => {
