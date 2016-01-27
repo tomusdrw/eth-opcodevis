@@ -9,6 +9,10 @@ export function getName (i) {
 	return instructionToName[i];
 }
 
+export function getCode (name) {
+	return opcodes[name];
+}
+
 export function isPush (i) {
 	return i <= opcodes.PUSH32 && i >= opcodes.PUSH1;
 }

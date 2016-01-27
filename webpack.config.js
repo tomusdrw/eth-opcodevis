@@ -6,14 +6,15 @@ var pkg = require('./package.json');
 var DEBUG = process.env.NODE_ENV !== 'production';
 
 var filename = util.format('[name].%s.js', pkg.version);
+var mods = !DEBUG ? [] : [
+	'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
+	'webpack/hot/only-dev-server'
+];
 
 module.exports = {
 	entry: {
-		index: DEBUG ? [
-			'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
-			'webpack/hot/only-dev-server',
-			'./index.jsx'
-		] : './index.jsx'
+		index: mods.concat(['./index.jsx']),
+		compile: mods.concat(['./compile.jsx'])
 	},
 	devtool: process.env.WEBPACK_DEVTOOL || 'source-map',
 	output: {
