@@ -20185,7 +20185,7 @@
 					var push = this.generateByteCode('PUSH', dest, 0, {});
 					var _i = asHex(inst.getCode(op));
 	
-					return push + swap + _i;
+					return push + _i;
 				}
 	
 				var p = parseInt(params.replace(/^0x/, ''), 16).toString(16);
