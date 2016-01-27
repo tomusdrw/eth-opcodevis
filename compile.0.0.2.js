@@ -20143,7 +20143,7 @@
 			var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Compile)).call.apply(_Object$getPrototypeO, [this].concat(args)));
 	
 			_this.state = {
-				code: '',
+				code: window.localStorage['lastCode'] || '',
 				result: '',
 				error: false
 			};
@@ -20159,6 +20159,9 @@
 	
 				if (op === 'PUSH') {
 					op = op + ll;
+				}
+				if (op === 'JUMP' || op === 'JUMPI' || op === 'JUMPDEST') {
+					// TODO handle labels	
 				}
 				var i = inst.getCode(op);
 				if (!i) {
@@ -20176,6 +20179,7 @@
 			key: 'onCodeChange',
 			value: function onCodeChange(ev) {
 				var code = ev.target.value;
+				window.localStorage['lastCode'] = code;
 				try {
 					var result = this.result(code);
 					this.setState({
@@ -20196,7 +20200,13 @@
 			value: function result(code) {
 				var _this2 = this;
 	
-				return '0x' + code.split('\n').map(function (line) {
+				return '0x' + code.split('\n')
+				// Remove comments
+				.map(function (line) {
+					return line.replace(/#.+/, '');
+				})
+				// Remove whitespace
+				.map(function (line) {
 					return line.replace(/^\s+/, '').replace(/\s+$/, '').replace(/\s+/, ' ');
 				}).filter(function (line) {
 					return line;
