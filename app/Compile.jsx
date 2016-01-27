@@ -39,7 +39,6 @@ export class Compile extends React.Component {
 			}
 			let dest = labels[params] || '0x00';
 			let push = this.generateByteCode('PUSH', dest, 0, {});
-			let swap = this.generateByteCode('SWAP1', '', 0, {});
 			let i = asHex(inst.getCode(op));
 
 			return push + swap + i;
