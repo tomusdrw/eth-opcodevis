@@ -20254,6 +20254,7 @@
 						'div',
 						{ className: 'form-group' },
 						_react2.default.createElement('input', {
+							className: 'form-control',
 							readOnly: true,
 							type: 'text',
 							value: this.state.result
