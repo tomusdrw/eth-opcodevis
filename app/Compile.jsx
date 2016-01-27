@@ -1,7 +1,19 @@
 import React from 'react';
 import {render} from 'react-dom';
+import Codemirror from 'react-codemirror';
+import 'codemirror/mode/yaml/yaml';
+import 'codemirror/lib/codemirror.css';
+import './styles.css';
 
 import * as inst from './OpCodes';
+
+function asHex(v) {
+	let value = v.toString(16);
+	if (value.length % 2) {
+		return `0${value}`;
+	}
+	return value;
+}
 
 export class Compile extends React.Component {
 
@@ -14,7 +26,25 @@ export class Compile extends React.Component {
 		};
 	}
 
-	generateByteCode (op, params) {
+	generateByteCode (op, params, pc, labels, warnMissingLabel) {
+
+		if (op === 'JUMPDEST') {
+			labels[params] = pc.toString(16);
+			params = '';
+		}
+
+		if (op === 'JUMP' || op === 'JUMPI') {
+			if (warnMissingLabel && !labels[params]) {
+				throw new Error(`Cannot find destinaton for label ${params}`);
+			}
+			let dest = labels[params] || '0x00';
+			let push = this.generateByteCode('PUSH', dest, 0, {});
+			let swap = this.generateByteCode('SWAP1', '', 0, {});
+			let i = asHex(inst.getCode(op));
+
+			return push + swap + i;
+		}
+
 		const p = parseInt(params.replace(/^0x/, ''), 16).toString(16);
 		const l = p.length / 2;
 		const ll = Math.ceil(l);
@@ -22,10 +52,9 @@ export class Compile extends React.Component {
 		if (op === 'PUSH') {
 			op = op + ll;
 		}
-		if (op === 'JUMP' || op === 'JUMPI' || op === 'JUMPDEST') {
-			// TODO handle labels	
-		}
+
 		let i = inst.getCode(op);
+
 		if (!i) {
 			throw new Error(`Unknown instruction ${op}. Maybe it does not need params?`)
 		}
@@ -33,13 +62,13 @@ export class Compile extends React.Component {
 			throw new Error(`Unable to parse params: ${params}`);
 		}
 		if (isNaN(parseInt(p, 16))) {
-			return i;
+			return asHex(i);
 		}
-		return i + ((l !== ll) ? `0${p}` : p);
+		return asHex(i) + ((l !== ll) ? `0${p}` : p);
 	}
 
-	onCodeChange (ev) {
-		const code = ev.target.value;
+	onCodeChange (code) {
+		// const code = ev.target.value;
 		window.localStorage['lastCode'] = code;
 		try {
 			const result = this.result(code);
@@ -58,7 +87,7 @@ export class Compile extends React.Component {
 	}
 
 	result (code) {
-		return '0x' + code
+		let opcodes = code
 			.split('\n')
 			// Remove comments
 			.map((line) => line.replace(/#.+/, ''))
@@ -66,10 +95,25 @@ export class Compile extends React.Component {
 			.map((line) => line.replace(/^\s+/, '').replace(/\s+$/, '').replace(/\s+/, ' '))
 			.filter((line) => line)
 			.map((line) => {
-				const params = line.split(' ');
+				let params = line.split(' ');
 				const op = params.shift().toUpperCase();
-				return this.generateByteCode(op, params.join(''));
-			}).join('');
+				params = params.join('');
+				return {
+					op, params
+				};
+			});
+
+		let labels = {};
+		// Fill the labels		
+		opcodes.reduce((code, opc) => {
+			const pc = code.length / 2;
+			return code + this.generateByteCode(opc.op, opc.params, pc, labels, false);
+		}, '');
+		// Second time - labels filled properly
+		return '0x' + opcodes.reduce((code, opc) => {
+			const pc = code.length / 2;
+			return code + this.generateByteCode(opc.op, opc.params, pc, labels, true);
+		}, '');
 	}
 
 	renderError () {
@@ -87,12 +131,10 @@ export class Compile extends React.Component {
 		return (
 			<div>
 				<div className={'form-group'}>
-					<textarea
-						rows={20}
-						placeholder={'Write Code Here'}
-						className={'form-control'}
+					<Codemirror
 						value={this.state.code}
 						onChange={this.onCodeChange.bind(this)}
+						options={{lineNumbers: true, mode: 'yaml'}}
 						/>
 				</div>
 				{this.renderError()}

@@ -4,7 +4,7 @@
   "description": "Ethereum VM opcode simple visualiser",
   "main": "''",
   "scripts": {
-	"start": "npm run dev",
+    "start": "npm run dev",
     "build": "NODE_ENV=\"production\" webpack --progress --profile --colors",
     "dev": "webpack-dev-server --progress --profile --colors --hot"
   },
@@ -17,9 +17,11 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "3.3.5",
+    "codemirror": "^5.11.0",
     "lodash": "^4.0.0",
     "node-libs-browser": "0.5.3",
     "react": "0.14.6",
+    "react-codemirror": "^0.2.5",
     "react-dom": "0.14.6"
   },
   "devDependencies": {
