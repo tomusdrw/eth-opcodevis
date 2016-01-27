@@ -41,7 +41,7 @@ export class Compile extends React.Component {
 			let push = this.generateByteCode('PUSH', dest, 0, {});
 			let i = asHex(inst.getCode(op));
 
-			return push + swap + i;
+			return push + i;
 		}
 
 		const p = parseInt(params.replace(/^0x/, ''), 16).toString(16);
