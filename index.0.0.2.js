@@ -34894,12 +34894,15 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	function asHex(i) {
+	function asHexWithoutPrefix(i) {
 		var x = i.toString(16);
 		if (x.length < 2) {
-			return '0x0' + x;
+			return '0' + x;
 		}
-		return '0x' + x;
+		return '' + x;
+	}
+	function asHex(i) {
+		return '0x' + asHexWithoutPrefix(i);
 	}
 	
 	function padName(n) {
@@ -35047,8 +35050,10 @@
 					};
 					if (inst.isPush(i)) {
 						var b = inst.getPushBytes(i);
-						var word = parseInt(bytes.slice(pc + 1, pc + b + 1).join(''), 16);
-						instruction.param = asHex(word);
+						var word = bytes.slice(pc + 1, pc + b + 1).map(function (x) {
+							return asHexWithoutPrefix(parseInt(x, 16));
+						}).join('');
+						instruction.param = '0x' + word;
 						pc += b;
 					}
 					result.push(instruction);
