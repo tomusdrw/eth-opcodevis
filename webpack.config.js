@@ -7,7 +7,7 @@ var DEBUG = process.env.NODE_ENV !== 'production';
 
 var filename = util.format('[name].%s.js', pkg.version);
 var mods = !DEBUG ? [] : [
-	'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
+	'webpack-dev-server/client?http://0.0.0.0:8070', // WebpackDevServer host and port
 	'webpack/hot/only-dev-server'
 ];
 

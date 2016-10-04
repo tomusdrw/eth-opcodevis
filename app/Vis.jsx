@@ -3,12 +3,15 @@ import {render} from 'react-dom';
 
 import * as inst from './OpCodes';
 
-function asHex(i) {
+function asHexWithoutPrefix(i) {
 	let x = i.toString(16);
 	if (x.length < 2) {
-		return `0x0${x}`;
-	}
-	return `0x${x}`;
+    return `0${x}`;
+  }
+  return `${x}`;
+}
+function asHex(i) {
+	return `0x${asHexWithoutPrefix(i)}`;
 }
 
 function padName(n) {
@@ -100,8 +103,8 @@ export class Vis extends React.Component {
 			};
 			if (inst.isPush(i)) {
 				let b = inst.getPushBytes(i);
-				let word = parseInt(bytes.slice(pc + 1, pc + b + 1).join(''), 16);
-				instruction.param = asHex(word);
+        let word = bytes.slice(pc + 1, pc + b + 1).map(x => asHexWithoutPrefix(parseInt(x, 16))).join('');
+				instruction.param = `0x${word}`;
 				pc += b;
 			}
 			result.push(instruction);
