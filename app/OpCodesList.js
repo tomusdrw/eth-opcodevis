@@ -266,6 +266,10 @@ export const CALLCODE = 0xf2;
 export const RETURN = 0xf3;
 /// like CALLCODE but keeps caller's value and sender
 export const DELEGATECALL = 0xf4;
+/// Reverts the state without consuming all gas.
+export const REVERT = 0xfd;
+/// Invalid opcode used by solidity to fail and consume gas.
+export const INVALID_OPERATION = 0xfe;
 /// halt execution and register account for later deletion
 export const SUICIDE = 0xff;	
 

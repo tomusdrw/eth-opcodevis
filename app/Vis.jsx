@@ -90,10 +90,8 @@ export class Vis extends React.Component {
 		while (pc < bytes.length) {
 			let i = parseInt(bytes[pc], 16);
 			let name = inst.getName(i);
-			if (!name) {
-				let e = new Error(`Unknown instruction: ${bytes[pc]} at ${pc}.`);
-				e.pos = pc;
-				throw e;
+      if (!name) {
+        name = `UNKNOWN (${bytes[pc]})`;
 			}
 			let instruction = {
 				pc: pc,
