@@ -16,7 +16,7 @@
   "author": "Ethcore",
   "license": "MIT",
   "dependencies": {
-    "bootstrap": "3.3.5",
+    "bootstrap": "3.4.1",
     "codemirror": "^5.11.0",
     "lodash": "^4.0.0",
     "node-libs-browser": "0.5.3",
