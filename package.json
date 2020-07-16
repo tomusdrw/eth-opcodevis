@@ -18,7 +18,7 @@
   "dependencies": {
     "bootstrap": "3.4.1",
     "codemirror": "^5.11.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "node-libs-browser": "0.5.3",
     "react": "0.14.6",
     "react-codemirror": "^0.2.5",
